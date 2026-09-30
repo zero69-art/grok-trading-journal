@@ -1,35 +1,36 @@
 # Grok Discipline Machine
 
-A fully working discipline-first trading journal for EUR/USD + XAU/USD (London–NY overlap).
+Fully working discipline-first trading journal for EUR/USD + XAU/USD (London–NY overlap).
 
-## Real Features (not placeholders)
+## Working Features
 
 - **Daily Loss Limit Lock (–2R)**  
-  When today’s total R reaches –2 or lower, the “Save Trade” button is disabled and a lock banner appears. You cannot log more trades that day.
+  Tracks today’s R. When it reaches –2 or lower the Save Trade button is disabled and lock banners appear.
 
 - **Forced Reflection**  
-  If you mark a trade or session as “Plan = No”, a modal appears that you must complete before continuing. You answer: which rule, what feeling, what you will do differently.
+  Marking Plan = No opens a modal you must complete (rule broken, feeling, next action) before the data is saved.
 
 - **Weekly Review**  
-  Shows last sessions summary, clean vs broken sessions, biggest process leak, and a question to set focus for the next week.
+  Summary of recent sessions, clean vs broken, biggest process leak.
 
 - Pre-session Commitment  
 - Streaks (Day / Plan / Clean)  
-- Discipline Score (0–100) always visible  
+- Discipline Score (0–100) always in header  
+- Today R counter  
 - Full trade journal + session log  
-- Grok bot that responds based on your real data  
-- Data stored only on your device (localStorage)
+- MT5 import (paste lines)  
+- Grok bot that uses your real data  
+- All data stored only in localStorage on your device
+
+## Bug fixes in this version
+- Reliable string IDs (no float delete bugs)
+- Clean reflection flow for both trades and sessions
+- Accurate daily R calculation using `day` field
+- Form clearing after save / reflection
+- XSS-safe rendering
+- Restored Import tab
+- Removed unreachable code
+- Null-safe DOM updates
 
 ## Deploy
-1. Import this repo on Vercel
-2. Deploy
-3. Open in Safari → Add to Home Screen
-
-## How to use every evening
-1. Open app → click **I Commit for Tonight**
-2. Trade (or sit out)
-3. Log each trade (or skip)
-4. At the end → **Save Session** honestly
-5. If you broke rules → complete the forced reflection
-
-This version is designed to make breaking rules feel expensive and following the process feel automatic.
+Import this repo on Vercel → Deploy → Open in Safari → Add to Home Screen.
