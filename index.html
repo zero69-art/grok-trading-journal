@@ -6,7 +6,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="theme-color" content="#0f172a" />
-  <title>Grok Trading Journal</title>
+  <title>Grok Discipline Journal</title>
   <link rel="manifest" href="manifest.json" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%2338bdf8'/><text x='50' y='68' font-size='55' text-anchor='middle' fill='%230f172a' font-family='Arial' font-weight='bold'>G</text></svg>" />
   <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%2338bdf8'/><text x='50' y='68' font-size='55' text-anchor='middle' fill='%230f172a' font-family='Arial' font-weight='bold'>G</text></svg>" />
@@ -21,6 +21,7 @@
       --green: #22c55e;
       --red: #ef4444;
       --yellow: #eab308;
+      --purple: #a78bfa;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -29,42 +30,59 @@
       color: var(--text);
       min-height: 100vh;
       padding-bottom: 70px;
-      line-height: 1.5;
+      line-height: 1.45;
     }
     header {
-      background: var(--card);
-      padding: 14px 18px;
+      background: linear-gradient(135deg, #1e293b, #0f172a);
+      padding: 14px 16px;
       border-bottom: 1px solid var(--border);
       position: sticky;
       top: 0;
       z-index: 100;
     }
     header h1 {
-      font-size: 1.2rem;
+      font-size: 1.15rem;
       font-weight: 700;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
     }
     header h1 span { color: var(--accent); }
-    .subtitle { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
+    .subtitle { font-size: 0.72rem; color: var(--muted); margin-top: 2px; }
+    .discipline-bar {
+      margin-top: 10px;
+      background: var(--bg);
+      border-radius: 8px;
+      padding: 8px 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+    }
+    .discipline-score {
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+    .discipline-score.high { color: var(--green); }
+    .discipline-score.mid { color: var(--yellow); }
+    .discipline-score.low { color: var(--red); }
     nav {
       display: flex;
       background: var(--card);
       border-bottom: 1px solid var(--border);
       overflow-x: auto;
       position: sticky;
-      top: 58px;
+      top: 78px;
       z-index: 99;
     }
     nav button {
       flex: 1;
-      min-width: 70px;
-      padding: 11px 6px;
+      min-width: 64px;
+      padding: 10px 4px;
       background: none;
       border: none;
       color: var(--muted);
-      font-size: 0.8rem;
+      font-size: 0.72rem;
       font-weight: 500;
       cursor: pointer;
       border-bottom: 2px solid transparent;
@@ -73,60 +91,74 @@
       color: var(--accent);
       border-bottom-color: var(--accent);
     }
-    .page { display: none; padding: 14px; max-width: 640px; margin: 0 auto; }
+    .page { display: none; padding: 12px; max-width: 640px; margin: 0 auto; }
     .page.active { display: block; }
     .card {
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 14px;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
     .card h2 {
-      font-size: 0.95rem;
-      margin-bottom: 12px;
+      font-size: 0.9rem;
+      margin-bottom: 10px;
       color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
     label {
       display: block;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       color: var(--muted);
-      margin-bottom: 4px;
-      margin-top: 10px;
+      margin-bottom: 3px;
+      margin-top: 9px;
     }
     input, select, textarea {
       width: 100%;
-      padding: 10px 12px;
+      padding: 9px 11px;
       background: var(--bg);
       border: 1px solid var(--border);
       border-radius: 8px;
       color: var(--text);
-      font-size: 0.95rem;
+      font-size: 0.9rem;
     }
-    textarea { min-height: 65px; resize: vertical; }
-    .row { display: flex; gap: 10px; }
+    textarea { min-height: 60px; resize: vertical; }
+    .row { display: flex; gap: 8px; }
     .row > * { flex: 1; }
     button.primary {
       width: 100%;
-      padding: 12px;
+      padding: 11px;
       background: var(--accent);
       color: #0f172a;
       border: none;
       border-radius: 8px;
       font-weight: 600;
-      font-size: 0.95rem;
-      margin-top: 14px;
+      font-size: 0.9rem;
+      margin-top: 12px;
       cursor: pointer;
     }
-    button.primary:active { opacity: 0.9; }
+    button.danger-btn {
+      width: 100%;
+      padding: 11px;
+      background: var(--red);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin-top: 8px;
+      cursor: pointer;
+    }
     button.secondary {
       width: 100%;
-      padding: 10px;
+      padding: 9px;
       background: transparent;
       border: 1px solid var(--border);
       color: var(--text);
       border-radius: 8px;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       margin-top: 8px;
       cursor: pointer;
     }
@@ -134,29 +166,29 @@
       background: transparent;
       border: 1px solid var(--red);
       color: var(--red);
-      padding: 5px 10px;
+      padding: 4px 9px;
       border-radius: 6px;
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       cursor: pointer;
     }
     .trade {
       background: var(--bg);
       border: 1px solid var(--border);
       border-radius: 10px;
-      padding: 11px;
+      padding: 10px;
       margin-bottom: 8px;
     }
     .trade-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 4px;
+      margin-bottom: 3px;
     }
-    .pair { font-weight: 700; font-size: 0.95rem; }
+    .pair { font-weight: 700; font-size: 0.9rem; }
     .win { color: var(--green); }
     .loss { color: var(--red); }
     .be { color: var(--yellow); }
-    .meta { font-size: 0.75rem; color: var(--muted); }
+    .meta { font-size: 0.7rem; color: var(--muted); }
     .stats-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -165,53 +197,76 @@
     .stat {
       background: var(--bg);
       border-radius: 10px;
-      padding: 12px;
+      padding: 11px;
       text-align: center;
     }
-    .stat-value { font-size: 1.3rem; font-weight: 700; }
-    .stat-label { font-size: 0.7rem; color: var(--muted); margin-top: 2px; }
+    .stat-value { font-size: 1.25rem; font-weight: 700; }
+    .stat-label { font-size: 0.68rem; color: var(--muted); margin-top: 2px; }
+    .streak-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .streak-box {
+      background: var(--bg);
+      border-radius: 10px;
+      padding: 10px 6px;
+      text-align: center;
+      border: 1px solid var(--border);
+    }
+    .streak-num {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--accent);
+    }
+    .streak-label {
+      font-size: 0.65rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
     .checklist-item {
       display: flex;
       align-items: flex-start;
-      gap: 10px;
-      padding: 8px 0;
+      gap: 9px;
+      padding: 7px 0;
       border-bottom: 1px solid var(--border);
-      font-size: 0.85rem;
+      font-size: 0.82rem;
     }
     .checklist-item:last-child { border-bottom: none; }
-    .checklist-item input { width: auto; margin-top: 3px; }
+    .checklist-item input { width: auto; margin-top: 2px; }
     .bot-messages {
-      max-height: 300px;
+      max-height: 280px;
       overflow-y: auto;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       display: flex;
       flex-direction: column;
       gap: 8px;
     }
     .msg {
-      padding: 10px 12px;
-      border-radius: 12px;
-      max-width: 88%;
-      font-size: 0.85rem;
+      padding: 9px 11px;
+      border-radius: 11px;
+      max-width: 90%;
+      font-size: 0.82rem;
     }
     .msg.bot {
       background: #1e3a5f;
       align-self: flex-start;
-      border-bottom-left-radius: 4px;
+      border-bottom-left-radius: 3px;
     }
     .msg.user {
       background: var(--accent);
       color: #0f172a;
       align-self: flex-end;
-      border-bottom-right-radius: 4px;
+      border-bottom-right-radius: 3px;
     }
     .bot-input-row {
       display: flex;
-      gap: 8px;
+      gap: 7px;
     }
     .bot-input-row input { flex: 1; }
     .bot-input-row button {
-      padding: 0 14px;
+      padding: 0 13px;
       background: var(--accent);
       border: none;
       border-radius: 8px;
@@ -222,27 +277,57 @@
     .quick-btns {
       display: flex;
       flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 10px;
+      gap: 5px;
+      margin-top: 9px;
     }
     .quick-btns button {
       background: var(--bg);
       border: 1px solid var(--border);
       color: var(--text);
-      padding: 5px 9px;
-      border-radius: 16px;
-      font-size: 0.7rem;
+      padding: 5px 8px;
+      border-radius: 14px;
+      font-size: 0.68rem;
       cursor: pointer;
     }
-    .empty { text-align: center; color: var(--muted); padding: 24px 10px; font-size: 0.85rem; }
+    .empty { text-align: center; color: var(--muted); padding: 20px 8px; font-size: 0.82rem; }
     .note {
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       color: var(--muted);
       background: var(--bg);
-      padding: 10px;
+      padding: 9px;
       border-radius: 8px;
       margin-top: 10px;
       line-height: 1.4;
+    }
+    .commitment-box {
+      background: #1e3a5f;
+      border: 1px solid #38bdf8;
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+    .commitment-box p {
+      font-size: 0.85rem;
+      margin-bottom: 10px;
+    }
+    .warning {
+      background: #450a0a;
+      border: 1px solid var(--red);
+      color: #fecaca;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      margin-bottom: 10px;
+    }
+    .success-banner {
+      background: #052e16;
+      border: 1px solid var(--green);
+      color: #bbf7d0;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      margin-bottom: 10px;
     }
     footer {
       position: fixed;
@@ -251,31 +336,104 @@
       right: 0;
       background: var(--card);
       border-top: 1px solid var(--border);
-      padding: 7px;
+      padding: 6px;
       text-align: center;
-      font-size: 0.65rem;
+      font-size: 0.62rem;
       color: var(--muted);
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>Grok <span>Trading Journal</span></h1>
-    <div class="subtitle">EUR/USD + XAU/USD · London–NY Overlap</div>
+    <h1>Grok <span>Discipline Machine</span></h1>
+    <div class="subtitle">EUR/USD + XAU/USD · London–NY · Process > P&L</div>
+    <div class="discipline-bar">
+      <div>Discipline Score</div>
+      <div class="discipline-score" id="headerScore">—</div>
+    </div>
   </header>
 
   <nav>
-    <button class="active" data-page="journal">Journal</button>
+    <button class="active" data-page="today">Today</button>
+    <button data-page="journal">Journal</button>
     <button data-page="stats">Stats</button>
-    <button data-page="checklist">Checklist</button>
-    <button data-page="import">MT5 Import</button>
-    <button data-page="bot">Grok Bot</button>
+    <button data-page="checklist">Rules</button>
+    <button data-page="import">Import</button>
+    <button data-page="bot">Grok</button>
   </nav>
 
-  <!-- JOURNAL -->
-  <div id="journal" class="page active">
+  <!-- TODAY (Discipline Hub) -->
+  <div id="today" class="page active">
+    <div class="streak-grid">
+      <div class="streak-box">
+        <div class="streak-num" id="streakDays">0</div>
+        <div class="streak-label">Day Streak</div>
+      </div>
+      <div class="streak-box">
+        <div class="streak-num" id="planStreak">0</div>
+        <div class="streak-label">Plan Streak</div>
+      </div>
+      <div class="streak-box">
+        <div class="streak-num" id="noRevenge">0</div>
+        <div class="streak-label">Clean Days</div>
+      </div>
+    </div>
+
+    <div class="card" id="commitmentCard">
+      <h2>Pre-Session Commitment</h2>
+      <div class="commitment-box" id="commitmentArea">
+        <p>I will only take A+ setups on EUR/USD or XAU/USD.<br>Max 2 trades. Risk ≤ 1%. No revenge.</p>
+        <button class="primary" onclick="makeCommitment()" id="commitBtn">I Commit for Tonight</button>
+      </div>
+      <div id="committedMsg" style="display:none" class="success-banner">
+        Commitment locked for today. Follow the process.
+      </div>
+    </div>
+
     <div class="card">
-      <h2>Log New Trade</h2>
+      <h2>Quick Session Log</h2>
+      <div class="row">
+        <div>
+          <label>Trades Taken</label>
+          <select id="sessionTrades">
+            <option value="0">0 (Sat out)</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3+</option>
+          </select>
+        </div>
+        <div>
+          <label>Followed Plan?</label>
+          <select id="sessionPlan">
+            <option value="Yes">Yes – 100%</option>
+            <option value="Mostly">Mostly</option>
+            <option value="No">No – Broke rules</option>
+          </select>
+        </div>
+      </div>
+      <label>Emotional State</label>
+      <select id="sessionEmotion">
+        <option value="Calm">Calm & focused</option>
+        <option value="Neutral">Neutral</option>
+        <option value="FOMO">FOMO / Impatient</option>
+        <option value="Tilt">Tilt / Angry</option>
+        <option value="Tired">Tired</option>
+      </select>
+      <label>One sentence reflection</label>
+      <textarea id="sessionNote" placeholder="What did I do well or poorly?"></textarea>
+      <button class="primary" onclick="saveSession()">Close Session & Save</button>
+    </div>
+
+    <div class="card">
+      <h2>Recent Sessions</h2>
+      <div id="sessionList"></div>
+    </div>
+  </div>
+
+  <!-- JOURNAL -->
+  <div id="journal" class="page">
+    <div class="card">
+      <h2>Log Individual Trade</h2>
       <div class="row">
         <div>
           <label>Pair</label>
@@ -306,17 +464,17 @@
           </select>
         </div>
       </div>
-      <label>Setup / Notes</label>
-      <textarea id="notes" placeholder="Pullback / Break & retest / Momentum... Followed plan?"></textarea>
-      <label>Followed Plan?</label>
+      <label>Did I follow the plan on this trade?</label>
       <select id="followedPlan">
         <option value="Yes">Yes</option>
         <option value="No">No</option>
       </select>
+      <label>Notes (required if you broke the plan)</label>
+      <textarea id="notes" placeholder="Setup type + honesty about process"></textarea>
       <button class="primary" onclick="addTrade()">Save Trade</button>
     </div>
     <div class="card">
-      <h2>Recent Trades</h2>
+      <h2>Trade History</h2>
       <div id="tradeList"></div>
     </div>
   </div>
@@ -324,14 +482,14 @@
   <!-- STATS -->
   <div id="stats" class="page">
     <div class="card">
-      <h2>Performance Overview</h2>
-      <div class="stats-grid" id="statsGrid">
+      <h2>Discipline First</h2>
+      <div class="stats-grid">
+        <div class="stat"><div class="stat-value" id="discScore">0</div><div class="stat-label">Discipline Score</div></div>
+        <div class="stat"><div class="stat-value" id="planRate">0%</div><div class="stat-label">Plan Followed</div></div>
         <div class="stat"><div class="stat-value" id="totalTrades">0</div><div class="stat-label">Total Trades</div></div>
         <div class="stat"><div class="stat-value" id="winRate">0%</div><div class="stat-label">Win Rate</div></div>
-        <div class="stat"><div class="stat-value" id="avgR">0</div><div class="stat-label">Avg R</div></div>
         <div class="stat"><div class="stat-value" id="totalR">0</div><div class="stat-label">Total R</div></div>
-        <div class="stat"><div class="stat-value" id="planFollow">0%</div><div class="stat-label">Plan Followed</div></div>
-        <div class="stat"><div class="stat-value" id="bestPair">—</div><div class="stat-label">Best Pair</div></div>
+        <div class="stat"><div class="stat-value" id="avgR">0</div><div class="stat-label">Avg R</div></div>
       </div>
     </div>
     <div class="card">
@@ -340,46 +498,44 @@
     </div>
   </div>
 
-  <!-- CHECKLIST -->
+  <!-- RULES / CHECKLIST -->
   <div id="checklist" class="page">
     <div class="card">
-      <h2>Evening Checklist (6:00–10:00 PM)</h2>
-      <div class="checklist-item"><input type="checkbox" id="c1" /><label for="c1">Opened only EUR/USD + XAU/USD charts</label></div>
-      <div class="checklist-item"><input type="checkbox" id="c2" /><label for="c2">Marked PDH/PDL + Asian High/Low + key levels</label></div>
-      <div class="checklist-item"><input type="checkbox" id="c3" /><label for="c3">Checked economic calendar for US news</label></div>
-      <div class="checklist-item"><input type="checkbox" id="c4" /><label for="c4">Decided: only A+ setups today</label></div>
-      <div class="checklist-item"><input type="checkbox" id="c5" /><label for="c5">Max 2 trades total</label></div>
-      <div class="checklist-item"><input type="checkbox" id="c6" /><label for="c6">Risk ≤ 1% per trade + stop-loss placed</label></div>
-      <div class="checklist-item"><input type="checkbox" id="c7" /><label for="c7">No revenge trading / no forced trades</label></div>
-      <div class="checklist-item"><input type="checkbox" id="c8" /><label for="c8">Closed or managed all trades by 10 PM</label></div>
-      <div class="checklist-item"><input type="checkbox" id="c9" /><label for="c9">Journaled the session (even if no trade)</label></div>
-      <button class="primary" style="margin-top:14px" onclick="resetChecklist()">Reset Checklist</button>
+      <h2>Non-Negotiable Rules</h2>
+      <div class="checklist-item"><input type="checkbox" id="c1" /><label for="c1">Only EUR/USD + XAU/USD</label></div>
+      <div class="checklist-item"><input type="checkbox" id="c2" /><label for="c2">Marked PDH/PDL + Asian range + key levels</label></div>
+      <div class="checklist-item"><input type="checkbox" id="c3" /><label for="c3">Checked US news calendar</label></div>
+      <div class="checklist-item"><input type="checkbox" id="c4" /><label for="c4">Only A+ setups (no force)</label></div>
+      <div class="checklist-item"><input type="checkbox" id="c5" /><label for="c5">Max 2 trades</label></div>
+      <div class="checklist-item"><input type="checkbox" id="c6" /><label for="c6">Risk ≤ 1% + hard stop-loss</label></div>
+      <div class="checklist-item"><input type="checkbox" id="c7" /><label for="c7">No revenge / no moving stop</label></div>
+      <div class="checklist-item"><input type="checkbox" id="c8" /><label for="c8">Flat or managed by 10 PM</label></div>
+      <div class="checklist-item"><input type="checkbox" id="c9" /><label for="c9">Logged the session honestly</label></div>
+      <button class="primary" style="margin-top:12px" onclick="resetChecklist()">Reset for Next Session</button>
+    </div>
+    <div class="card">
+      <h2>Hard Truths</h2>
+      <div class="note">
+        • Sitting out is a winning decision.<br>
+        • One broken rule can erase weeks of good process.<br>
+        • Your job is the foundation — trading is the skill you build slowly.<br>
+        • Discipline score matters more than today’s P&L.
+      </div>
     </div>
   </div>
 
-  <!-- MT5 IMPORT -->
+  <!-- IMPORT -->
   <div id="import" class="page">
     <div class="card">
       <h2>Import from MT5</h2>
-      <p style="font-size:0.85rem;color:var(--muted);margin-bottom:12px">
-        Full automatic live sync with MT5 is not possible from a simple web app (security + technical limits). 
-        Instead, export your deals from MT5 and import them here.
+      <p style="font-size:0.8rem;color:var(--muted);margin-bottom:10px">
+        Automatic live sync is not possible from a web app. Export from MT5 and paste here.
       </p>
-
-      <h3 style="font-size:0.9rem;margin:14px 0 8px;color:var(--text)">How to export from MT5</h3>
-      <ol style="font-size:0.8rem;color:var(--muted);padding-left:18px;line-height:1.6">
-        <li>In MT5 go to <b>Toolbox → History</b></li>
-        <li>Right-click → <b>Report</b> or <b>Save as Report</b></li>
-        <li>Choose HTML or open the report and copy the deals table</li>
-        <li>Or manually note your closed trades and enter them below in simple format</li>
-      </ol>
-
-      <label style="margin-top:16px">Paste trades (one per line)</label>
-      <textarea id="importText" placeholder="Format examples:&#10;EURUSD Long +1.5 Win&#10;XAUUSD Short -1 Loss&#10;EUR/USD Long 2.0 Win Followed plan"></textarea>
+      <label>Paste trades (one per line)</label>
+      <textarea id="importText" placeholder="EURUSD Long +1.5 Win&#10;XAUUSD Short -1 Loss&#10;EUR/USD Long 2.0 Win"></textarea>
       <button class="primary" onclick="importTrades()">Import Trades</button>
-
       <div class="note">
-        <b>Note:</b> For true automatic tracking you would need a custom MT5 Expert Advisor that writes to a server + a backend. That is more complex and costs money to run. This import method keeps everything private on your phone and is free.
+        In MT5: Toolbox → History → right-click → Report. Then paste the key info here.
       </div>
     </div>
   </div>
@@ -387,36 +543,50 @@
   <!-- GROK BOT -->
   <div id="bot" class="page">
     <div class="card">
-      <h2>Grok Trading Bot</h2>
+      <h2>Grok Discipline Bot</h2>
       <div class="bot-messages" id="botMessages">
-        <div class="msg bot">Hey. I'm your Grok trading bot focused on EUR/USD + XAU/USD during the London–NY overlap.<br><br>Ask me about discipline, risk, setups, or your progress. Or use the quick buttons.</div>
+        <div class="msg bot">I am here to protect your process, not your ego.<br><br>Ask me anything about discipline, risk, when to stop, or how you’re actually doing.</div>
       </div>
       <div class="bot-input-row">
-        <input type="text" id="botInput" placeholder="Ask about your trading..." onkeydown="if(event.key==='Enter')askBot()" />
+        <input type="text" id="botInput" placeholder="Be honest with me..." onkeydown="if(event.key==='Enter')askBot()" />
         <button onclick="askBot()">Send</button>
       </div>
       <div class="quick-btns">
+        <button onclick="quickAsk('Roast my discipline')">Roast my discipline</button>
         <button onclick="quickAsk('What should I focus on tonight?')">Focus tonight</button>
-        <button onclick="quickAsk('Risk rules reminder')">Risk rules</button>
-        <button onclick="quickAsk('When should I sit out?')">When to sit out</button>
-        <button onclick="quickAsk('EUR/USD tip')">EUR/USD tip</button>
-        <button onclick="quickAsk('Gold tip')">Gold tip</button>
-        <button onclick="quickAsk('How am I doing?')">How am I doing?</button>
+        <button onclick="quickAsk('I feel like forcing a trade')">I want to force</button>
+        <button onclick="quickAsk('Risk rules')">Risk rules</button>
+        <button onclick="quickAsk('How am I really doing?')">How am I doing?</button>
+        <button onclick="quickAsk('I broke a rule')">I broke a rule</button>
       </div>
     </div>
   </div>
 
-  <footer>Data saved locally on your device · Grok Trading Journal</footer>
+  <footer>Process > Prediction · Data stays on your device</footer>
 
   <script>
     let trades = JSON.parse(localStorage.getItem('grokTrades') || '[]');
+    let sessions = JSON.parse(localStorage.getItem('grokSessions') || '[]');
+    let commitmentDate = localStorage.getItem('grokCommitDate') || '';
 
-    function save() {
+    const todayStr = new Date().toLocaleDateString('en-CA');
+
+    function saveAll() {
       localStorage.setItem('grokTrades', JSON.stringify(trades));
-      renderTrades();
-      renderStats();
+      localStorage.setItem('grokSessions', JSON.stringify(sessions));
+      renderEverything();
     }
 
+    function renderEverything() {
+      renderTrades();
+      renderStats();
+      renderSessions();
+      renderStreaks();
+      updateCommitmentUI();
+      updateHeaderScore();
+    }
+
+    // NAV
     document.querySelectorAll('nav button').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
@@ -426,6 +596,152 @@
       });
     });
 
+    // COMMITMENT
+    function makeCommitment() {
+      localStorage.setItem('grokCommitDate', todayStr);
+      commitmentDate = todayStr;
+      updateCommitmentUI();
+      addBotMsg("Commitment locked. Now protect it. Max 2 trades. Only A+ setups. No excuses.");
+    }
+
+    function updateCommitmentUI() {
+      const committed = commitmentDate === todayStr;
+      document.getElementById('commitmentArea').style.display = committed ? 'none' : 'block';
+      document.getElementById('committedMsg').style.display = committed ? 'block' : 'none';
+    }
+
+    // SESSION
+    function saveSession() {
+      const tradesTaken = document.getElementById('sessionTrades').value;
+      const plan = document.getElementById('sessionPlan').value;
+      const emotion = document.getElementById('sessionEmotion').value;
+      const note = document.getElementById('sessionNote').value.trim();
+
+      if (plan === 'No' && !note) {
+        alert('You broke the plan. Write at least one honest sentence about why.');
+        return;
+      }
+
+      const session = {
+        id: Date.now(),
+        date: new Date().toLocaleString('en-IN', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' }),
+        day: todayStr,
+        tradesTaken,
+        plan,
+        emotion,
+        note,
+        committed: commitmentDate === todayStr
+      };
+
+      // prevent double save same day
+      sessions = sessions.filter(s => s.day !== todayStr);
+      sessions.unshift(session);
+      saveAll();
+
+      document.getElementById('sessionNote').value = '';
+      document.getElementById('sessionTrades').value = '0';
+      document.getElementById('sessionPlan').value = 'Yes';
+      document.getElementById('sessionEmotion').value = 'Calm';
+
+      alert(plan === 'Yes' ? 'Clean session saved. Respect.' : 'Session saved. Learn from the break and move on.');
+    }
+
+    function renderSessions() {
+      const list = document.getElementById('sessionList');
+      if (sessions.length === 0) {
+        list.innerHTML = '<div class="empty">No sessions logged yet.</div>';
+        return;
+      }
+      list.innerHTML = sessions.slice(0, 15).map(s => {
+        const planClass = s.plan === 'Yes' ? 'win' : s.plan === 'No' ? 'loss' : 'be';
+        return `<div class="trade">
+          <div class="trade-header">
+            <span class="pair">${s.date}</span>
+            <span class="${planClass}">${s.plan}</span>
+          </div>
+          <div class="meta">Trades: ${s.tradesTaken} · Emotion: ${s.emotion} ${s.committed ? '· Committed' : ''}</div>
+          ${s.note ? `<div style="margin-top:4px;font-size:0.78rem">${s.note}</div>` : ''}
+        </div>`;
+      }).join('');
+    }
+
+    // STREAKS & SCORE
+    function renderStreaks() {
+      // Day streak = consecutive days with a session logged
+      let dayStreak = 0;
+      const days = [...new Set(sessions.map(s => s.day))].sort().reverse();
+      let check = todayStr;
+      for (const d of days) {
+        if (d === check) {
+          dayStreak++;
+          const dt = new Date(check);
+          dt.setDate(dt.getDate() - 1);
+          check = dt.toLocaleDateString('en-CA');
+        } else break;
+      }
+      // if no session today, still count previous streak
+      if (days[0] !== todayStr && days.length) {
+        dayStreak = 0;
+        check = days[0];
+        for (const d of days) {
+          if (d === check) {
+            dayStreak++;
+            const dt = new Date(check);
+            dt.setDate(dt.getDate() - 1);
+            check = dt.toLocaleDateString('en-CA');
+          } else break;
+        }
+      }
+
+      // Plan streak
+      let planStreak = 0;
+      for (const s of sessions) {
+        if (s.plan === 'Yes') planStreak++;
+        else break;
+      }
+
+      // Clean days (no broken plan)
+      let clean = 0;
+      for (const s of sessions) {
+        if (s.plan === 'Yes' || s.plan === 'Mostly') clean++;
+        else break;
+      }
+
+      document.getElementById('streakDays').textContent = dayStreak;
+      document.getElementById('planStreak').textContent = planStreak;
+      document.getElementById('noRevenge').textContent = clean;
+    }
+
+    function calcDisciplineScore() {
+      if (sessions.length === 0 && trades.length === 0) return 0;
+      const recent = sessions.slice(0, 20);
+      if (recent.length === 0) {
+        const planYes = trades.filter(t => t.followedPlan === 'Yes').length;
+        return trades.length ? Math.round((planYes / trades.length) * 100) : 0;
+      }
+      let score = 0;
+      recent.forEach(s => {
+        if (s.plan === 'Yes') score += 5;
+        else if (s.plan === 'Mostly') score += 2;
+        else score -= 3;
+        if (s.committed) score += 1;
+        if (s.emotion === 'Calm') score += 1;
+        if (s.tradesTaken === '0' || s.tradesTaken === '1' || s.tradesTaken === '2') score += 1;
+        if (parseInt(s.tradesTaken) > 2) score -= 2;
+      });
+      const max = recent.length * 8;
+      return Math.max(0, Math.min(100, Math.round((score / max) * 100)));
+    }
+
+    function updateHeaderScore() {
+      const score = calcDisciplineScore();
+      const el = document.getElementById('headerScore');
+      el.textContent = score;
+      el.className = 'discipline-score ' + (score >= 75 ? 'high' : score >= 45 ? 'mid' : 'low');
+      document.getElementById('discScore').textContent = score;
+    }
+
+    // TRADES
     function addTrade() {
       const pair = document.getElementById('pair').value;
       const direction = document.getElementById('direction').value;
@@ -434,6 +750,11 @@
       const notes = document.getElementById('notes').value.trim();
       const followedPlan = document.getElementById('followedPlan').value;
 
+      if (followedPlan === 'No' && !notes) {
+        alert('You marked that you broke the plan. Write why. Honesty is required.');
+        return;
+      }
+
       const trade = {
         id: Date.now() + Math.random(),
         date: new Date().toLocaleString('en-IN', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' }),
@@ -441,7 +762,7 @@
       };
 
       trades.unshift(trade);
-      save();
+      saveAll();
 
       document.getElementById('resultR').value = '';
       document.getElementById('notes').value = '';
@@ -452,14 +773,14 @@
     function deleteTrade(id) {
       if (confirm('Delete this trade?')) {
         trades = trades.filter(t => t.id !== id);
-        save();
+        saveAll();
       }
     }
 
     function renderTrades() {
       const list = document.getElementById('tradeList');
       if (trades.length === 0) {
-        list.innerHTML = '<div class="empty">No trades yet. Log your first one after the session.</div>';
+        list.innerHTML = '<div class="empty">No trades yet.</div>';
         return;
       }
       list.innerHTML = trades.slice(0, 40).map(t => `
@@ -468,9 +789,9 @@
             <span class="pair">${t.pair} · ${t.direction}</span>
             <span class="${t.outcome === 'Win' ? 'win' : t.outcome === 'Loss' ? 'loss' : 'be'}">${t.outcome} (${t.resultR > 0 ? '+' : ''}${t.resultR}R)</span>
           </div>
-          <div class="meta">${t.date} · Plan: ${t.followedPlan}</div>
-          ${t.notes ? `<div style="margin-top:5px;font-size:0.8rem">${t.notes}</div>` : ''}
-          <div style="margin-top:7px"><button class="danger" onclick="deleteTrade(${t.id})">Delete</button></div>
+          <div class="meta">${t.date} · Plan: <b class="${t.followedPlan === 'Yes' ? 'win' : 'loss'}">${t.followedPlan}</b></div>
+          ${t.notes ? `<div style="margin-top:4px;font-size:0.78rem">${t.notes}</div>` : ''}
+          <div style="margin-top:6px"><button class="danger" onclick="deleteTrade(${t.id})">Delete</button></div>
         </div>
       `).join('');
     }
@@ -482,7 +803,13 @@
       const totalR = trades.reduce((s, t) => s + (t.resultR || 0), 0);
       const avgR = total ? (totalR / total).toFixed(2) : 0;
       const planYes = trades.filter(t => t.followedPlan === 'Yes').length;
-      const planFollow = total ? Math.round((planYes / total) * 100) : 0;
+      const planRate = total ? Math.round((planYes / total) * 100) : 0;
+
+      document.getElementById('totalTrades').textContent = total;
+      document.getElementById('winRate').textContent = winRate + '%';
+      document.getElementById('avgR').textContent = avgR;
+      document.getElementById('totalR').textContent = (totalR > 0 ? '+' : '') + totalR.toFixed(1);
+      document.getElementById('planRate').textContent = planRate + '%';
 
       const byPair = {};
       trades.forEach(t => {
@@ -491,18 +818,6 @@
         byPair[t.pair].count++;
         if (t.outcome === 'Win') byPair[t.pair].wins++;
       });
-      let bestPair = '—';
-      let bestR = -Infinity;
-      for (const p in byPair) {
-        if (byPair[p].r > bestR) { bestR = byPair[p].r; bestPair = p; }
-      }
-
-      document.getElementById('totalTrades').textContent = total;
-      document.getElementById('winRate').textContent = winRate + '%';
-      document.getElementById('avgR').textContent = avgR;
-      document.getElementById('totalR').textContent = (totalR > 0 ? '+' : '') + totalR.toFixed(1);
-      document.getElementById('planFollow').textContent = planFollow + '%';
-      document.getElementById('bestPair').textContent = bestPair;
 
       const pairDiv = document.getElementById('pairStats');
       if (Object.keys(byPair).length === 0) {
@@ -524,59 +839,39 @@
       for (let i = 1; i <= 9; i++) document.getElementById('c' + i).checked = false;
     }
 
-    // ===== MT5 IMPORT =====
+    // IMPORT
     function importTrades() {
       const text = document.getElementById('importText').value.trim();
       if (!text) { alert('Paste some trades first'); return; }
-
       const lines = text.split('\n').map(l => l.trim()).filter(l => l);
       let added = 0;
-
       lines.forEach(line => {
-        // Simple flexible parser
         const lower = line.toLowerCase();
-        let pair = 'EUR/USD';
-        if (lower.includes('xau') || lower.includes('gold')) pair = 'XAU/USD';
-        else if (lower.includes('eur')) pair = 'EUR/USD';
-
-        let direction = 'Long';
-        if (lower.includes('short') || lower.includes('sell')) direction = 'Short';
-
+        let pair = lower.includes('xau') || lower.includes('gold') ? 'XAU/USD' : 'EUR/USD';
+        let direction = (lower.includes('short') || lower.includes('sell')) ? 'Short' : 'Long';
         let outcome = 'BE';
-        if (lower.includes('win') || lower.includes('+')) outcome = 'Win';
+        if (lower.includes('win') || (lower.includes('+') && !lower.includes('-'))) outcome = 'Win';
         else if (lower.includes('loss') || lower.includes('-')) outcome = 'Loss';
-
-        // Extract number for R
         const numMatch = line.match(/([+-]?\d+\.?\d*)/);
         let resultR = numMatch ? parseFloat(numMatch[1]) : 0;
         if (outcome === 'Loss' && resultR > 0) resultR = -resultR;
         if (outcome === 'Win' && resultR < 0) resultR = Math.abs(resultR);
-
-        let followedPlan = 'Yes';
-        if (lower.includes('no plan') || lower.includes('broke') || lower.includes('revenge')) followedPlan = 'No';
-
-        const trade = {
+        let followedPlan = (lower.includes('no plan') || lower.includes('broke') || lower.includes('revenge')) ? 'No' : 'Yes';
+        trades.unshift({
           id: Date.now() + Math.random() + added,
           date: new Date().toLocaleString('en-IN', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' }),
           pair, direction, resultR, outcome,
-          notes: 'Imported from MT5: ' + line,
+          notes: 'Imported: ' + line,
           followedPlan
-        };
-        trades.unshift(trade);
+        });
         added++;
       });
-
-      save();
+      saveAll();
       document.getElementById('importText').value = '';
       alert(added + ' trade(s) imported');
-      // switch to journal
-      document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      document.querySelector('nav button[data-page="journal"]').classList.add('active');
-      document.getElementById('journal').classList.add('active');
     }
 
-    // ===== GROK BOT =====
+    // GROK BOT – stricter & more useful
     function addBotMsg(text, isUser = false) {
       const div = document.createElement('div');
       div.className = 'msg ' + (isUser ? 'user' : 'bot');
@@ -591,7 +886,7 @@
       if (!q) return;
       addBotMsg(q, true);
       input.value = '';
-      setTimeout(() => respond(q), 350);
+      setTimeout(() => respond(q), 300);
     }
 
     function quickAsk(text) {
@@ -601,37 +896,48 @@
 
     function respond(q) {
       const lower = q.toLowerCase();
-      let reply = "I focus on your EUR/USD + XAU/USD London–NY system. Ask about focus, risk rules, when to sit out, pair tips, or how you're doing.";
+      const score = calcDisciplineScore();
+      const planYes = trades.filter(t => t.followedPlan === 'Yes').length;
+      const planRate = trades.length ? Math.round((planYes / trades.length) * 100) : 0;
 
-      if (lower.includes('focus') || lower.includes('tonight')) {
-        reply = "Tonight focus only on EUR/USD and XAU/USD between 7:00–9:30 PM IST. Wait for clear A+ setups. Max 2 trades. If nothing clean appears, sit out. That is winning behaviour.";
-      } else if (lower.includes('risk')) {
-        reply = "Hard rules:\n• Risk 0.5–1% per trade maximum\n• Always place stop-loss immediately\n• Never move stop further away\n• Daily loss limit = 2% → stop trading\n• No revenge trades after a loss";
-      } else if (lower.includes('sit') || lower.includes('out')) {
-        reply = "Sit out when:\n• You feel tired, angry or distracted after work\n• No clear level or setup is present\n• You already took 2 trades\n• High-impact news is about to drop and you have no plan\n\nDoing nothing is a professional decision.";
-      } else if (lower.includes('eur')) {
-        reply = "EUR/USD tip: Look for clean pullbacks in the direction of the higher timeframe bias, or break-and-retest of key levels (PDH/PDL or Asian range). Avoid choppy mid-range action.";
-      } else if (lower.includes('gold') || lower.includes('xau')) {
-        reply = "XAU/USD (Gold) tip: Gold loves momentum. Prefer strong directional moves or breakouts from tight ranges. It can move fast — respect your stop strictly and don’t chase.";
-      } else if (lower.includes('doing') || lower.includes('progress') || lower.includes('stats')) {
-        const total = trades.length;
-        if (total === 0) {
-          reply = "No trades logged yet. Start journaling after your next session — even if you take zero trades. Consistency of process matters more than results right now.";
+      let reply = "Speak clearly. Ask about focus, risk, forcing trades, broken rules, or your real progress.";
+
+      if (lower.includes('roast') || lower.includes('discipline')) {
+        if (score >= 80) reply = `Discipline score ${score}. You are currently protecting the process. Do not get cocky. One emotional evening can erase it.`;
+        else if (score >= 50) reply = `Discipline score ${score}. Average. You still break rules sometimes. Average traders stay average. Raise the standard.`;
+        else reply = `Discipline score ${score}. This is weak. You are leaking edge through poor process. Fix the behaviour before you worry about setups.`;
+      }
+      else if (lower.includes('focus') || lower.includes('tonight')) {
+        reply = "Tonight: EUR/USD + XAU/USD only. 7:00–9:30 PM window. Max 2 trades. Only A+ setups. If nothing is clean — you sit. That is the job.";
+      }
+      else if (lower.includes('force') || lower.includes('fomo') || lower.includes('impatient')) {
+        reply = "Stop. Forcing is how accounts die. You already have a job. You do not need a trade tonight. Close the charts if necessary. Protect the streak.";
+      }
+      else if (lower.includes('risk')) {
+        reply = "Non-negotiable:\n• 0.5–1% risk max\n• Stop-loss placed immediately\n• Never move stop away\n• 2% daily loss limit = done for the day\n• No revenge, ever";
+      }
+      else if (lower.includes('broke') || lower.includes('broke a rule') || lower.includes('broken')) {
+        reply = "Good that you admitted it. Write exactly what rule you broke and why in the journal. Then stop trading for the rest of the session. One clean recovery day is better than digging deeper.";
+      }
+      else if (lower.includes('doing') || lower.includes('progress') || lower.includes('really')) {
+        if (trades.length === 0 && sessions.length === 0) {
+          reply = "No data yet. Start logging. The machine only works when you feed it honest information.";
         } else {
-          const wins = trades.filter(t => t.outcome === 'Win').length;
-          const planYes = trades.filter(t => t.followedPlan === 'Yes').length;
-          const totalR = trades.reduce((s,t)=>s+(t.resultR||0),0);
-          reply = `You have ${total} trades logged.\nWin rate: ${Math.round(wins/total*100)}%\nTotal R: ${totalR.toFixed(1)}\nPlan followed: ${Math.round(planYes/total*100)}%\n\nFocus on raising the “Plan followed” percentage. That is the real edge.`;
+          reply = `Discipline Score: ${score}\nPlan followed (trades): ${planRate}%\nSessions logged: ${sessions.length}\n\nThe only number that matters long-term is how consistently you follow the rules. Everything else is secondary.`;
         }
-      } else if (lower.includes('hello') || lower.includes('hi')) {
-        reply = "Hey. Ready for the London–NY session? Remember: process over prediction.";
+      }
+      else if (lower.includes('sit') || lower.includes('out')) {
+        reply = "Sitting out is a high-performance decision. Most retail traders cannot do it. If you can regularly choose not to trade, you already have an edge over them.";
+      }
+      else if (lower.includes('hello') || lower.includes('hi')) {
+        reply = "Ready. Protect the process tonight.";
       }
 
       addBotMsg(reply);
     }
 
-    renderTrades();
-    renderStats();
+    // INIT
+    renderEverything();
 
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js').catch(() => {});

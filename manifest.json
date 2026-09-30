@@ -1,7 +1,7 @@
 {
-  "name": "Grok Trading Journal",
-  "short_name": "Grok Journal",
-  "description": "EUR/USD + XAU/USD trading journal with Grok bot for London-NY overlap",
+  "name": "Grok Discipline Machine",
+  "short_name": "Grok Discipline",
+  "description": "EUR/USD + XAU/USD discipline journal for London-NY overlap",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0f172a",
