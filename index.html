@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="theme-color" content="#0f172a" />
+  <title>Grok Trading Journal</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --border: #334155;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+      --green: #22c55e;
+      --red: #ef4444;
+      --yellow: #eab308;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding-bottom: 80px;
+      line-height: 1.5;
+    }
+    header {
+      background: var(--card);
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    header h1 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    header h1 span { color: var(--accent); }
+    .subtitle { font-size: 0.8rem; color: var(--muted); margin-top: 2px; }
+    nav {
+      display: flex;
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      overflow-x: auto;
+      position: sticky;
+      top: 65px;
+      z-index: 99;
+    }
+    nav button {
+      flex: 1;
+      min-width: 80px;
+      padding: 12px 8px;
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+    }
+    nav button.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+    .page { display: none; padding: 16px; max-width: 640px; margin: 0 auto; }
+    .page.active { display: block; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    .card h2 {
+      font-size: 1rem;
+      margin-bottom: 12px;
+      color: var(--accent);
+    }
+    label {
+      display: block;
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 4px;
+      margin-top: 10px;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 10px 12px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 1rem;
+    }
+    textarea { min-height: 70px; resize: vertical; }
+    .row { display: flex; gap: 10px; }
+    .row > * { flex: 1; }
+    button.primary {
+      width: 100%;
+      padding: 12px;
+      background: var(--accent);
+      color: #0f172a;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 1rem;
+      margin-top: 16px;
+      cursor: pointer;
+    }
+    button.primary:active { opacity: 0.9; }
+    button.danger {
+      background: transparent;
+      border: 1px solid var(--red);
+      color: var(--red);
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+    .trade {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 10px;
+    }
+    .trade-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .pair { font-weight: 700; font-size: 1rem; }
+    .win { color: var(--green); }
+    .loss { color: var(--red); }
+    .be { color: var(--yellow); }
+    .meta { font-size: 0.8rem; color: var(--muted); }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .stat {
+      background: var(--bg);
+      border-radius: 10px;
+      padding: 14px;
+      text-align: center;
+    }
+    .stat-value { font-size: 1.4rem; font-weight: 700; }
+    .stat-label { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
+    .checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.9rem;
+    }
+    .checklist-item:last-child { border-bottom: none; }
+    .checklist-item input { width: auto; margin-top: 3px; }
+    .bot-messages {
+      max-height: 320px;
+      overflow-y: auto;
+      margin-bottom: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .msg {
+      padding: 10px 14px;
+      border-radius: 12px;
+      max-width: 85%;
+      font-size: 0.9rem;
+    }
+    .msg.bot {
+      background: #1e3a5f;
+      align-self: flex-start;
+      border-bottom-left-radius: 4px;
+    }
+    .msg.user {
+      background: var(--accent);
+      color: #0f172a;
+      align-self: flex-end;
+      border-bottom-right-radius: 4px;
+    }
+    .bot-input-row {
+      display: flex;
+      gap: 8px;
+    }
+    .bot-input-row input { flex: 1; }
+    .bot-input-row button {
+      padding: 0 16px;
+      background: var(--accent);
+      border: none;
+      border-radius: 8px;
+      color: #0f172a;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .quick-btns {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+    .quick-btns button {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 6px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      cursor: pointer;
+    }
+    .empty { text-align: center; color: var(--muted); padding: 30px 10px; font-size: 0.9rem; }
+    footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--card);
+      border-top: 1px solid var(--border);
+      padding: 8px;
+      text-align: center;
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Grok <span>Trading Journal</span></h1>
+    <div class="subtitle">EUR/USD + XAU/USD · London–NY Overlap</div>
+  </header>
+
+  <nav>
+    <button class="active" data-page="journal">Journal</button>
+    <button data-page="stats">Stats</button>
+    <button data-page="checklist">Checklist</button>
+    <button data-page="bot">Grok Bot</button>
+  </nav>
+
+  <!-- JOURNAL PAGE -->
+  <div id="journal" class="page active">
+    <div class="card">
+      <h2>Log New Trade</h2>
+      <div class="row">
+        <div>
+          <label>Pair</label>
+          <select id="pair">
+            <option value="EUR/USD">EUR/USD</option>
+            <option value="XAU/USD">XAU/USD</option>
+          </select>
+        </div>
+        <div>
+          <label>Direction</label>
+          <select id="direction">
+            <option value="Long">Long</option>
+            <option value="Short">Short</option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <label>Result (R)</label>
+          <input type="number" id="resultR" step="0.1" placeholder="e.g. 1.5 or -1" />
+        </div>
+        <div>
+          <label>Outcome</label>
+          <select id="outcome">
+            <option value="Win">Win</option>
+            <option value="Loss">Loss</option>
+            <option value="BE">Break Even</option>
+          </select>
+        </div>
+      </div>
+      <label>Setup / Notes</label>
+      <textarea id="notes" placeholder="Pullback / Break & retest / Momentum... Did I follow the plan?"></textarea>
+      <label>Followed Plan?</label>
+      <select id="followedPlan">
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+      </select>
+      <button class="primary" onclick="addTrade()">Save Trade</button>
+    </div>
+
+    <div class="card">
+      <h2>Recent Trades</h2>
+      <div id="tradeList"></div>
+    </div>
+  </div>
+
+  <!-- STATS PAGE -->
+  <div id="stats" class="page">
+    <div class="card">
+      <h2>Performance Overview</h2>
+      <div class="stats-grid" id="statsGrid">
+        <div class="stat"><div class="stat-value" id="totalTrades">0</div><div class="stat-label">Total Trades</div></div>
+        <div class="stat"><div class="stat-value" id="winRate">0%</div><div class="stat-label">Win Rate</div></div>
+        <div class="stat"><div class="stat-value" id="avgR">0</div><div class="stat-label">Avg R</div></div>
+        <div class="stat"><div class="stat-value" id="totalR">0</div><div class="stat-label">Total R</div></div>
+        <div class="stat"><div class="stat-value" id="planFollow">0%</div><div class="stat-label">Plan Followed</div></div>
+        <div class="stat"><div class="stat-value" id="bestPair">—</div><div class="stat-label">Best Pair</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <h2>By Pair</h2>
+      <div id="pairStats"></div>
+    </div>
+  </div>
+
+  <!-- CHECKLIST PAGE -->
+  <div id="checklist" class="page">
+    <div class="card">
+      <h2>Evening Checklist (6:00–10:00 PM)</h2>
+      <div class="checklist-item"><input type="checkbox" id="c1" /><label for="c1">Opened only EUR/USD + XAU/USD charts</label></div>
+      <div class="checklist-item"><input type="checkbox" id="c2" /><label for="c2">Marked PDH/PDL + Asian High/Low + key levels</label></div>
+      <div class="checklist-item"><input type="checkbox" id="c3" /><label for="c3">Checked economic calendar for US news</label></div>
+      <div class="checklist-item"><input type="checkbox" id="c4" /><label for="c4">Decided: only A+ setups today</label></div>
+      <div class="checklist-item"><input type="checkbox" id="c5" /><label for="c5">Max 2 trades total</label></div>
+      <div class="checklist-item"><input type="checkbox" id="c6" /><label for="c6">Risk ≤ 1% per trade + stop-loss placed</label></div>
+      <div class="checklist-item"><input type="checkbox" id="c7" /><label for="c7">No revenge trading / no forced trades</label></div>
+      <div class="checklist-item"><input type="checkbox" id="c8" /><label for="c8">Closed or managed all trades by 10 PM</label></div>
+      <div class="checklist-item"><input type="checkbox" id="c9" /><label for="c9">Journaled the session (even if no trade)</label></div>
+      <button class="primary" style="margin-top:16px" onclick="resetChecklist()">Reset Checklist</button>
+    </div>
+  </div>
+
+  <!-- GROK BOT PAGE -->
+  <div id="bot" class="page">
+    <div class="card">
+      <h2>Grok Trading Bot</h2>
+      <div class="bot-messages" id="botMessages">
+        <div class="msg bot">Hey. I'm your Grok trading bot focused on EUR/USD + XAU/USD during the London–NY overlap.<br><br>Ask me about discipline, risk, setups, or your rules. Or use the quick buttons below.</div>
+      </div>
+      <div class="bot-input-row">
+        <input type="text" id="botInput" placeholder="Ask about your trading..." onkeydown="if(event.key==='Enter')askBot()" />
+        <button onclick="askBot()">Send</button>
+      </div>
+      <div class="quick-btns">
+        <button onclick="quickAsk('What should I focus on tonight?')">Focus tonight</button>
+        <button onclick="quickAsk('Risk rules reminder')">Risk rules</button>
+        <button onclick="quickAsk('When should I sit out?')">When to sit out</button>
+        <button onclick="quickAsk('EUR/USD tip')">EUR/USD tip</button>
+        <button onclick="quickAsk('Gold tip')">Gold tip</button>
+        <button onclick="quickAsk('How am I doing?')">How am I doing?</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>Data saved locally on your device · Grok Trading Journal</footer>
+
+  <script>
+    // ========== DATA ==========
+    let trades = JSON.parse(localStorage.getItem('grokTrades') || '[]');
+
+    function save() {
+      localStorage.setItem('grokTrades', JSON.stringify(trades));
+      renderTrades();
+      renderStats();
+    }
+
+    // ========== NAV ==========
+    document.querySelectorAll('nav button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(btn.dataset.page).classList.add('active');
+      });
+    });
+
+    // ========== JOURNAL ==========
+    function addTrade() {
+      const pair = document.getElementById('pair').value;
+      const direction = document.getElementById('direction').value;
+      const resultR = parseFloat(document.getElementById('resultR').value) || 0;
+      const outcome = document.getElementById('outcome').value;
+      const notes = document.getElementById('notes').value.trim();
+      const followedPlan = document.getElementById('followedPlan').value;
+
+      if (!notes && outcome === 'Loss') {
+        // still allow
+      }
+
+      const trade = {
+        id: Date.now(),
+        date: new Date().toLocaleString('en-IN', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' }),
+        pair, direction, resultR, outcome, notes, followedPlan
+      };
+
+      trades.unshift(trade);
+      save();
+
+      // reset form
+      document.getElementById('resultR').value = '';
+      document.getElementById('notes').value = '';
+      document.getElementById('followedPlan').value = 'Yes';
+      alert('Trade saved');
+    }
+
+    function deleteTrade(id) {
+      if (confirm('Delete this trade?')) {
+        trades = trades.filter(t => t.id !== id);
+        save();
+      }
+    }
+
+    function renderTrades() {
+      const list = document.getElementById('tradeList');
+      if (trades.length === 0) {
+        list.innerHTML = '<div class="empty">No trades yet. Log your first one after the session.</div>';
+        return;
+      }
+      list.innerHTML = trades.slice(0, 30).map(t => `
+        <div class="trade">
+          <div class="trade-header">
+            <span class="pair">${t.pair} · ${t.direction}</span>
+            <span class="${t.outcome === 'Win' ? 'win' : t.outcome === 'Loss' ? 'loss' : 'be'}">${t.outcome} (${t.resultR > 0 ? '+' : ''}${t.resultR}R)</span>
+          </div>
+          <div class="meta">${t.date} · Plan: ${t.followedPlan}</div>
+          ${t.notes ? `<div style="margin-top:6px;font-size:0.85rem">${t.notes}</div>` : ''}
+          <div style="margin-top:8px"><button class="danger" onclick="deleteTrade(${t.id})">Delete</button></div>
+        </div>
+      `).join('');
+    }
+
+    // ========== STATS ==========
+    function renderStats() {
+      const total = trades.length;
+      const wins = trades.filter(t => t.outcome === 'Win').length;
+      const winRate = total ? Math.round((wins / total) * 100) : 0;
+      const totalR = trades.reduce((s, t) => s + (t.resultR || 0), 0);
+      const avgR = total ? (totalR / total).toFixed(2) : 0;
+      const planYes = trades.filter(t => t.followedPlan === 'Yes').length;
+      const planFollow = total ? Math.round((planYes / total) * 100) : 0;
+
+      // best pair by total R
+      const byPair = {};
+      trades.forEach(t => {
+        if (!byPair[t.pair]) byPair[t.pair] = { r: 0, count: 0, wins: 0 };
+        byPair[t.pair].r += t.resultR || 0;
+        byPair[t.pair].count++;
+        if (t.outcome === 'Win') byPair[t.pair].wins++;
+      });
+      let bestPair = '—';
+      let bestR = -Infinity;
+      for (const p in byPair) {
+        if (byPair[p].r > bestR) { bestR = byPair[p].r; bestPair = p; }
+      }
+
+      document.getElementById('totalTrades').textContent = total;
+      document.getElementById('winRate').textContent = winRate + '%';
+      document.getElementById('avgR').textContent = avgR;
+      document.getElementById('totalR').textContent = (totalR > 0 ? '+' : '') + totalR.toFixed(1);
+      document.getElementById('planFollow').textContent = planFollow + '%';
+      document.getElementById('bestPair').textContent = bestPair;
+
+      // pair breakdown
+      const pairDiv = document.getElementById('pairStats');
+      if (Object.keys(byPair).length === 0) {
+        pairDiv.innerHTML = '<div class="empty">No data yet</div>';
+      } else {
+        pairDiv.innerHTML = Object.entries(byPair).map(([p, d]) => `
+          <div class="trade" style="margin-bottom:8px">
+            <div class="trade-header">
+              <span class="pair">${p}</span>
+              <span>${d.count} trades · ${(d.r > 0 ? '+' : '') + d.r.toFixed(1)}R</span>
+            </div>
+            <div class="meta">Win rate: ${d.count ? Math.round((d.wins/d.count)*100) : 0}%</div>
+          </div>
+        `).join('');
+      }
+    }
+
+    // ========== CHECKLIST ==========
+    function resetChecklist() {
+      for (let i = 1; i <= 9; i++) {
+        document.getElementById('c' + i).checked = false;
+      }
+    }
+
+    // ========== GROK BOT ==========
+    const botReplies = {
+      'focus': "Tonight focus only on EUR/USD and XAU/USD during 7:00–9:30 PM IST. Wait for clear A+ setups. Max 2 trades. If nothing clean appears, sit out. That is winning behaviour.",
+      'risk': "Hard rules:\n• Risk 0.5–1% per trade maximum\n• Always place stop-loss immediately\n• Never move stop further away\n• Daily loss limit = 2% → stop trading\n• No revenge trades after a loss",
+      'sit': "Sit out when:\n• You feel tired, angry or distracted after work\n• No clear level or setup is present\n• You already took 2 trades\n• High-impact news is about to drop and you have no plan\n\nDoing nothing is a professional decision.",
+      'eur': "EUR/USD tip: Look for clean pullbacks in the direction of the higher timeframe bias, or break-and-retest of key levels (PDH/PDL or Asian range). Avoid choppy mid-range action.",
+      'gold': "XAU/USD (Gold) tip: Gold loves momentum. Prefer strong directional moves or breakouts from tight ranges. It can move fast — respect your stop strictly and don’t chase.",
+      'doing': null // special
+    };
+
+    function addBotMsg(text, isUser = false) {
+      const div = document.createElement('div');
+      div.className = 'msg ' + (isUser ? 'user' : 'bot');
+      div.innerHTML = text.replace(/\n/g, '<br>');
+      document.getElementById('botMessages').appendChild(div);
+      document.getElementById('botMessages').scrollTop = 9999;
+    }
+
+    function askBot() {
+      const input = document.getElementById('botInput');
+      const q = input.value.trim();
+      if (!q) return;
+      addBotMsg(q, true);
+      input.value = '';
+      setTimeout(() => respond(q), 400);
+    }
+
+    function quickAsk(text) {
+      document.getElementById('botInput').value = text;
+      askBot();
+    }
+
+    function respond(q) {
+      const lower = q.toLowerCase();
+      let reply = "I focus on your EUR/USD + XAU/USD London–NY system. Ask me about focus, risk rules, when to sit out, EUR/USD tip, Gold tip, or how you're doing.";
+
+      if (lower.includes('focus') || lower.includes('tonight')) reply = botReplies.focus;
+      else if (lower.includes('risk')) reply = botReplies.risk;
+      else if (lower.includes('sit') || lower.includes('out')) reply = botReplies.sit;
+      else if (lower.includes('eur')) reply = botReplies.eur;
+      else if (lower.includes('gold') || lower.includes('xau')) reply = botReplies.gold;
+      else if (lower.includes('doing') || lower.includes('progress') || lower.includes('stats')) {
+        const total = trades.length;
+        if (total === 0) reply = "No trades logged yet. Start journaling after your next session — even if you take zero trades. Consistency of process matters more than results right now.";
+        else {
+          const wins = trades.filter(t => t.outcome === 'Win').length;
+          const planYes = trades.filter(t => t.followedPlan === 'Yes').length;
+          const totalR = trades.reduce((s,t)=>s+(t.resultR||0),0);
+          reply = `You have ${total} trades logged.\nWin rate: ${Math.round(wins/total*100)}%\nTotal R: ${totalR.toFixed(1)}\nPlan followed: ${Math.round(planYes/total*100)}%\n\nFocus on raising the “Plan followed” percentage. That is the real edge.`;
+        }
+      }
+      else if (lower.includes('hello') || lower.includes('hi')) reply = "Hey. Ready for the London–NY session? Remember: process over prediction.";
+
+      addBotMsg(reply);
+    }
+
+    // ========== INIT ==========
+    renderTrades();
+    renderStats();
+
+    // Register service worker for PWA
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js').catch(() => {});
+    }
+  </script>
+</body>
+</html>
